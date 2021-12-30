@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+		 id="WebApp_ID" version="2.5">
+
+	<!-- 过滤器 -->
+	<filter>
+		<filter-name>characterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<!-- 配置初始化参数：utf-8 -->
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceRequestEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceResponseEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<!-- 配置访问路径 -->
+	<filter-mapping>
+		<!-- 这里的name要和上面的name一致 -->
+		<filter-name>characterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 启动服务器的时候加载这个全局配置文件 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<!-- 指定配置文件路径 -->
+		<param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+	<!-- 监听当前tomcat容器被启动之后去加载的这个文件，spring框架提供了一个监听器 -->
+	<listener>
+		<!-- 完整结构包名 -->
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+
+	<!-- 前端控制器 -->
+	<servlet>
+		<servlet-name>dispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- 给当前的serlvet配置初始化参数，当这个serlvet什么时候被创建就什么时候加载 -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:springmvc-servlet.xml</param-value>
+		</init-param>
+		<!-- 一旦服务器启动就加载当前这个servlet -->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- 访问url路径 -->
+	<servlet-mapping>
+		<!-- 这里的name要和上面的name一致 -->
+		<servlet-name>dispatcherServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+</web-app>
